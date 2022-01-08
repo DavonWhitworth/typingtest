@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, fetch, response, date, state } from "react";
+import styled from "styled-components";
+
+const nav = styled.a`
+padding: 0.5rem 0;`
+
 
 function App() {
+
+  const [userInput, setUserInput] = useState([""])
+
+
+
+
+  const setString = "This is test text for my typing test";
+  var setText = setString.split("");
+  const time = 60;
+
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <test>
+        <nav>
+          Reset
+          {time}
+          30, 60, 90, 120
+        </nav>
+
+        <texts>
+          <setTextdiv style={styled.setText}>
+            {setText}
+          </setTextdiv>
+          <userTextdiv>
+
+          </userTextdiv>
+        </texts>
+      </test>
+
+    </>
   );
 }
 
