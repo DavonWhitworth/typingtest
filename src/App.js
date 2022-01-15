@@ -27,18 +27,20 @@ function App() {
 
   const setString = "This is test text for my typing test";
   var dotextsMatch = "";
-  var setText = setString.split();
+  var setText = setString.split("");
   const time = 60;
   var correctness = [];
 
 
-
+  useEffect(() => {
+    checkUserInput();
+    console.log(userInput);
+  }, [userInput]);
 
 
   const SettingUserInput = (data) => {
     //newUserInputdata = data.usertext.split("")    "newUserInputdata= " + newUserInputdata
-    console.log("settingUserIput()= " + data);
-    setUserInput(data);
+    setUserInput(data.target.value.split(""));
     return;
   }
 
@@ -46,22 +48,17 @@ function App() {
   /*loop through arrays to check the accuracy of user's input, 
   record accuracy in correctness[], 1 correct; 0 incorrect;*/
   const checkUserInput = () => {
-    console.log("checking user function ran");
+
     if (userInput[userInput.length - 1] === setText[userInput.length - 1]) correctness[userInput.length - 1] = 1; //correct
     else if (userInput[userInput.length - 1] !== setText[userInput.length - 1]) correctness[userInput.length - 1] = 0; //incorrect
 
-    for (let i = 0; i < correctness.length; i++) {
-      if (correctness[i] === 0) dotextsMatch = false
-    }
+    if (correctness[userInput.length - 1] === 0) console.log("Incorrect letter, app ln 55");
+    console.log(correctness);
   }
 
 
 
 
-  //useeffect to triggercheckuesrinput
-  useEffect(() => {
-    checkUserInput();
-  }, [userInput]);
 
 
   return (
@@ -87,7 +84,7 @@ function App() {
               <input
                 type="text"
                 name="usertext"
-                onChange={data => console.log("input data: " + data)}
+                onChange={SettingUserInput}
                 placeholder="Start typing..." />
 
             </form>
