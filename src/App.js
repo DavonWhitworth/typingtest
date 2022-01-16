@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
-import Preview from './Textpreview.js';
+
 //import { TextInput } from 'react-native'
 
 
@@ -23,8 +23,6 @@ function App() {
 
   const [userInput, setUserInput] = useState([])
 
-  console.log("userinput =  " + userInput + "userInput length = " + userInput.length);
-
   const setString = "This is test text for my typing test";
   var dotextsMatch = "";
   var setText = setString.split("");
@@ -34,25 +32,29 @@ function App() {
 
   useEffect(() => {
     checkUserInput();
-    console.log(userInput);
+    console.log("userInput = " + userInput);
   }, [userInput]);
 
 
   const SettingUserInput = (data) => {
-    //newUserInputdata = data.usertext.split("")    "newUserInputdata= " + newUserInputdata
     setUserInput(data.target.value.split(""));
     return;
   }
 
-  //input field will setUserInput() then 
+
+
+  //Validates correctness of userInput over setText but correctness [] does not record in different elements
+
   /*loop through arrays to check the accuracy of user's input, 
   record accuracy in correctness[], 1 correct; 0 incorrect;*/
   const checkUserInput = () => {
 
-    if (userInput[userInput.length - 1] === setText[userInput.length - 1]) correctness[userInput.length - 1] = 1; //correct
-    else if (userInput[userInput.length - 1] !== setText[userInput.length - 1]) correctness[userInput.length - 1] = 0; //incorrect
+    var placeholder = userInput.length - 1;
 
-    if (correctness[userInput.length - 1] === 0) console.log("Incorrect letter, app ln 55");
+    if (userInput[placeholder] === setText[placeholder]) correctness[placeholder] = 1; //correct
+    else if (userInput[placeholder] !== setText[placeholder]) correctness[placeholder] = 0; //incorrect
+
+    if (correctness[placeholder] === 0) console.log("Incorrect letter, app ln 55");
     console.log(correctness);
   }
 
