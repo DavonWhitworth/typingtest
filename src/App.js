@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
+import DictionaryCaller from "./DictionaryCaller";
 
 //import { TextInput } from 'react-native'
 
@@ -65,6 +66,7 @@ function App() {
 
   return (
     <>
+      <DictionaryCaller />
 
       <TextBlock>
         <nav>
