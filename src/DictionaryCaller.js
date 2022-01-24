@@ -4,27 +4,37 @@ const axios = require('axios').default;
 
 export default function DictionaryCaller() {
 
-    const wordUrl = "https://random-word-api.herokuapp.com/word?number=1&swear=0"
-    const vocabUrl = "https://wordsapiv1.p.mashape.com/words/" + { word }
-    const [[word], setWord] = useState(null)
-    const [[define, use], setDefine] = useState(null)
-    // const [use, setUse] = useState(null)
+    const words = ["misadjusting", "bucket", "spiritist", "inefficacious", "creakinesses",
+        "ampoule", "gaes", "nyalas", "linearizations", "sainfoins", "allotropy", "cartilages", "seasonality",
+        "cores", "funnier", "unbends", "untwisting", "sexiness", "sphery", "temperamentally", "hassel",
+        "airfreighted", "ascender", "wellness", "asthenia", "specifications", "gondolier", "toilsome",
+        "briefcases", "ridgels", "entoil", "asphodel", "postbellum", "centai", "margravates", "chautauqua",
+        "spillovers", "cataphyll", "rocamboles", "teepee", "superventions", "cay", "doobie", "nervule", "orphaned",
+        "width", "azimuths", "trails", "receivership", "mopinesses"];
+
+    const vocabUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/hello";
+    var currentWord;
+
+
+    const [define, setDefine] = useState(null)
+    //const [use, setUse] = useState(null)
 
 
     useEffect(() => {
 
-        axios.get(wordUrl)
-            .then(response => {
-                setWord(response.data)
-            })
+        currentWord = words[Math.random(50)];
+        // + currentWord
         axios.get(vocabUrl)
             .then(response => {
-                setDefine([response.data.definition])
+                //setDefine([response.definitions])
+                console.log("called axios vocab   " + JSON.stringify(response.data.word))
             })
 
+        //console.log("current word = " + currentWord + "    definition is = " + define)
 
-    }, [, wordUrl])
-    console.log(" API data = " + word);
+    }, [])
+
+
 
     return (
 
