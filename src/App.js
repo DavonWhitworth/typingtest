@@ -5,7 +5,7 @@ import DictionaryCaller from "./DictionaryCaller";
 //import { TextInput } from 'react-native'
 
 
-const TextBlock = Styled.div`
+const TestBlock = Styled.div`
 background: #262626;
 color: #ACBFA4;
 max-width: 70%;
@@ -66,20 +66,18 @@ function App() {
 
   return (
     <>
-      <DictionaryCaller />
-
-      <TextBlock>
+      <TestBlock>
         <nav>
-          Reset
+          Reset place
           {time}
-          30, 60, 90, 120
+          Timer place
         </nav>
 
         <div className="texts">
           <div className="setText">
             {dotextsMatch}
             <br />
-            {setText}
+            <DictionaryCaller />
 
           </div>
           <div className="userText">
@@ -94,7 +92,7 @@ function App() {
             </form>
           </div>
         </div>
-      </TextBlock>
+      </TestBlock>
 
     </>
   );

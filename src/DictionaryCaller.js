@@ -12,11 +12,14 @@ export default function DictionaryCaller() {
         "spillovers", "cataphyll", "rocamboles", "teepee", "superventions", "cay", "doobie", "nervule", "orphaned",
         "width", "azimuths", "trails", "receivership", "mopinesses"];
 
+
+    //api docs + call link
+    //https://dictionaryapi.dev/
+    //https://api.dictionaryapi.dev/api/v2/entries/en/<word>
     const vocabUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/hello";
-    var currentWord;
+    var currentWord
 
-
-    const [define, setDefine] = useState(null)
+    const [define, setDefine] = useState("")
     //const [use, setUse] = useState(null)
 
 
@@ -26,8 +29,10 @@ export default function DictionaryCaller() {
         // + currentWord
         axios.get(vocabUrl)
             .then(response => {
-                //setDefine([response.definitions])
-                console.log("called axios vocab   " + JSON.stringify(response.data.word))
+                var definition = response.data[0].meanings[0].definitions[0].definition;
+                Capitalize(definition);
+                setDefine(definition)
+
             })
 
         //console.log("current word = " + currentWord + "    definition is = " + define)
@@ -35,10 +40,21 @@ export default function DictionaryCaller() {
     }, [])
 
 
+    const Capitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
-    return (
 
-        null
-
+    return (<>
+        <div>
+            {currentWord}
+            <br />
+            {define}
+        </div>
+    </>
     )
 }
+//what am i doing
+/*
+get right json data, set to define, return word, break, define
+*/
