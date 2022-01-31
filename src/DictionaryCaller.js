@@ -12,11 +12,12 @@ export default function DictionaryCaller() {
         "spillovers", "cataphyll", "rocamboles", "teepee", "superventions", "cay", "doobie", "nervule", "orphaned",
         "width", "azimuths", "trails", "receivership", "mopinesses"];
 
-
     //api docs + call link
     //https://dictionaryapi.dev/
     //https://api.dictionaryapi.dev/api/v2/entries/en/<word>
-    const vocabUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/hello";
+
+
+    var vocabUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/";
     var currentWord
 
     const [define, setDefine] = useState("")
@@ -25,9 +26,10 @@ export default function DictionaryCaller() {
 
     useEffect(() => {
 
-        currentWord = words[Math.random(50)];
-        // + currentWord
-        axios.get(vocabUrl)
+        currentWord = words[Math.random(0, 49)];
+        //currentWord = "asthenia";
+        console.log("current word = " + currentWord);
+        axios.get(vocabUrl + currentWord)
             .then(response => {
                 var definition = response.data[0].meanings[0].definitions[0].definition;
                 Capitalize(definition);
@@ -40,17 +42,19 @@ export default function DictionaryCaller() {
     }, [])
 
 
+
+
     const Capitalize = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
 
     return (<>
-        <div>
-            {currentWord}
-            <br />
-            {define}
-        </div>
+        [
+        {currentWord},
+
+        {define}
+        ]
     </>
     )
 }
