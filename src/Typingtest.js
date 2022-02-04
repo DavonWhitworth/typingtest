@@ -68,9 +68,8 @@ function App() {
         <>
             <TestBlock>
                 <nav>
-                    Reset place
+                    Reset button place
                     {time}
-                    Timer place
                 </nav>
 
                 <div className="texts">
