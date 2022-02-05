@@ -30,9 +30,10 @@ function App() {
     const time = 60;
     var correctness = [];
 
+    // var [word, definition] = <DictionaryCaller />
 
     useEffect(() => {
-        checkUserInput();
+        // checkUserInput();
         console.log("userInput = " + userInput);
     }, [userInput]);
 
@@ -76,8 +77,9 @@ function App() {
                     <div className="setText">
                         {dotextsMatch}
                         <br />
-                        <DictionaryCaller />
 
+
+                        <DictionaryCaller />
                     </div>
                     <div className="userText">
                         <br />

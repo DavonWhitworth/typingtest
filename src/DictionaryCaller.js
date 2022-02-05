@@ -24,24 +24,37 @@ export default function DictionaryCaller() {
 
 
     var vocabUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/";
-    var currentWord
+    const startWord = words[Math.trunc(Math.random() * words.length)];
+    var currentWord = startWord;
+    var isStart = true;
 
     const [define, setDefine] = useState("")
+
     //const [use, setUse] = useState(null)
 
 
     useEffect(() => {
 
-        currentWord = words[Math.trunc(Math.random() * words.length)];
-        console.log("current word = " + currentWord);
-        axios.get(vocabUrl + currentWord)
-            .then(response => {
-                var definition = response.data[0].meanings[0].definitions[0].definition;
-                Capitalize(definition);
-                setDefine(definition)
+        if (isStart) {
+            isStart = false;
+            axios.get(vocabUrl + currentWord)
+                .then(response => {
+                    var definition = response.data[0].meanings[0].definitions[0].definition;
+                    //Capitalize(definition);
+                    setDefine(definition)
 
-            })
+                })
+        } else {
+            currentWord = words[Math.trunc(Math.random() * words.length)];
+            console.log("current word = " + currentWord);
+            axios.get(vocabUrl + currentWord)
+                .then(response => {
+                    var definition = response.data[0].meanings[0].definitions[0].definition;
+                    //Capitalize(definition);
+                    setDefine(definition)
 
+                })
+        }
         //console.log("current word = " + currentWord + "    definition is = " + define)
 
     }, [])
@@ -59,7 +72,6 @@ export default function DictionaryCaller() {
         {currentWord}
         <br />
         {define}
-
     </>
     )
 }
