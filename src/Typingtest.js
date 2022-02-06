@@ -34,9 +34,7 @@ function App() {
     const [userInput, setUserInput] = useState([])
 
     const setString = "This is test text for my typing test";
-    var dotextsMatch = "";
     var setText = setString.split("");
-    const time = 60;
     var correctness = [];
 
     const [term, setTerm] = useState();
@@ -44,7 +42,7 @@ function App() {
 
 
     useEffect(() => {
-        // checkUserInput();
+        checkUserInput();
         console.log("userInput = " + userInput);
     }, [userInput]);
 
@@ -78,21 +76,20 @@ function App() {
     //start of texts div; <DictionaryCaller/> // term={setTerm()} termDef={setTermDef()}
     return (
         <>
+            <DictionaryCaller term={setTerm} def={setTermDef} />
             <TestBlock>
                 <nav>
-                    Reset button place
-                    {time}
+                    Reset & Timer place
                 </nav>
 
                 <Texts>
                     <div className="setText">
-                        {dotextsMatch}
                         <br />
-                        The term is {term}
+                        Term = {term}
                         <br />
-                        The term's definition is {termDef}
+                        Definition = {termDef}
                         <br />
-                        <DictionaryCaller />
+
 
                     </div>
                     <div className="userText">

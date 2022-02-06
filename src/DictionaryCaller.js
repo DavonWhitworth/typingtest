@@ -2,26 +2,23 @@ import React, { useState, useEffect } from 'react'
 const axios = require('axios').default;
 
 //class DictionaryCaller extends Typingtest()
-export default function DictionaryCaller() {
+export default function DictionaryCaller(props) {
 
     const Capitalize = (str) => {
         return (str.charAt(0).toUpperCase() + str.slice(1));
     }
 
 
-    const words = ["quantity", "bucket", "quality", "inefficacious", "success",
-        "ampoule", "abandon", "authority", "avoid", "award", "aware", "awful", "assignment",
-        "artistic", "artist", "balance", "behavior", "battery", "benefit", "board", "brilliant",
-        "carefully", "ascender", "wellness", "asthenia", "gondolier", "toilsome",
-        "briefcases", "ridgels", "entoil", "postbellum", "centai", "margravates", "chautauqua",
-        "rocamboles", "teepee", "superventions", "cay", "orphaned",
-        "width", "azimuths", "trails", "receivership", "mopinesses", "cluster", "competition", "considerable", "consistent", "defendant",
-        "discrimination", "dramatic", "electronic", "everybody", "foundation", "government", "headquarters", "independence",
-        "independent", "involvement", "landscape", "location", "manufacturer", "management", "maintenance", "moderate",
-        "modern", "modest", "musician", "mystery", "narrative", "natural", "necessary", "neighborhood", "neighbor",
-        "negotiation", "negotiate", "nonetheless", "nothing", "nuclear", "observation", "observe", "observer", "occupation",
-        "occupy", "Olympic", "opportunity", "organize", "participant", "participate", "partnership", "policy", "political",
-        "pollution", "population", "presentation", "psychological", "rank", "refugee", "reform", "relax"];
+    const words = ["quantity", "quality", "inefficacious", "abandon", "authority", "award", "aware",
+        "awful", "assignment", "artistic", "artist", "behavior", "battery", "benefit", "board", "carefully",
+        "ascender", "wellness", "asthenia", "gondolier", "toilsome", "briefcases", "postbellum", "margravates",
+        "rocamboles", "teepee", "superventions", "cay", "orphaned", "width", "azimuths", "trails", "receivership",
+        "competition", "considerable", "consistent", "defendant", "discrimination", "dramatic", "electronic",
+        "everybody", "foundation", "government", "independent", "involvement", "landscape", "location", "manufacturer", "management", "maintenance",
+        "moderate", "modern", "modest", "mystery", "narrative", "natural", "necessary", "neighbor", "negotiation",
+        "negotiate", "nonetheless", "nothing", "nuclear", "observation", "observe", "observer", "reform",
+        "occupation", "occupy", "Olympic", "organize", "participant", "participate", "partnership", "policy",
+        "political", "pollution", "population", "presentation", "rank", "refugee", "relax"];
 
     //api docs + call link
     //https://dictionaryapi.dev/
@@ -64,14 +61,12 @@ export default function DictionaryCaller() {
 
 
 
-
+    props.term(currentWord)
+    props.def(define)
 
 
     return (<>
 
-        {currentWord}
-        <br />
-        {define}
     </>
     )
 }
