@@ -9,12 +9,21 @@ const TestBlock = Styled.div`
 background: #262626;
 color: #ACBFA4;
 max-width: 70%;
+border-radius: 20px;
+padding: 20px;
+position: realtive;
 `
 //font-size: 1.5em;
 const nav = Styled.nav`
+position: absolute;
+left: 50%;
 
 `
+const Texts = Styled.nav`
 
+
+`
+//margin: 30px;
 
 
 
@@ -30,7 +39,9 @@ function App() {
     const time = 60;
     var correctness = [];
 
-    // var [word, definition] = <DictionaryCaller />
+    const [term, setTerm] = useState();
+    const [termDef, setTermDef] = useState();
+
 
     useEffect(() => {
         // checkUserInput();
@@ -64,7 +75,7 @@ function App() {
 
 
 
-
+    //start of texts div; <DictionaryCaller/> // term={setTerm()} termDef={setTermDef()}
     return (
         <>
             <TestBlock>
@@ -73,13 +84,16 @@ function App() {
                     {time}
                 </nav>
 
-                <div className="texts">
+                <Texts>
                     <div className="setText">
                         {dotextsMatch}
                         <br />
-
-
+                        The term is {term}
+                        <br />
+                        The term's definition is {termDef}
+                        <br />
                         <DictionaryCaller />
+
                     </div>
                     <div className="userText">
                         <br />
@@ -92,7 +106,7 @@ function App() {
 
                         </form>
                     </div>
-                </div>
+                </Texts>
             </TestBlock>
 
         </>

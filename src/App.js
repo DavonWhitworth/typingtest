@@ -2,13 +2,17 @@ import React from "react"
 import Typingtest from './Typingtest';
 
 
+
+
 function App() {
 
 
 
   return (
     <>
+
       <Typingtest />
+
     </>
   );
 }
