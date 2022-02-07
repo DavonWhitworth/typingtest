@@ -61,8 +61,8 @@ export default function DictionaryCaller(props) {
 
 
 
-    props.term(currentWord)
-    props.def(define)
+    props.term(JSON.stringify(currentWord))
+    props.def(JSON.stringify(define))
 
 
     return (<>

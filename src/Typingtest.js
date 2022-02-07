@@ -35,16 +35,28 @@ function App() {
 
     const setString = "This is test text for my typing test";
     var setText = setString.split("");
-    var correctness = [];
+    var accuractChars;
+    var accuracy;
 
     const [term, setTerm] = useState();
     const [termDef, setTermDef] = useState();
+    const [termTestString, setTermString] = useState();
+    const [termArrTester, setArrTester] = useState();
 
 
     useEffect(() => {
-        checkUserInput();
+        //checkUserInput();
         console.log("userInput = " + userInput);
     }, [userInput]);
+
+    //use effect to handle dictionary caller
+
+    useEffect(() => {
+        setTermString(term + ":" + " " + termDef);
+        //const termSplit = term.split("");
+        // const termDefSplit = termDef.split("");
+        setArrTester(": ");
+    }, [, term, termDef])
 
 
     const SettingUserInput = (data) => {
@@ -60,13 +72,14 @@ function App() {
     record accuracy in correctness[], 1 correct; 0 incorrect;*/
     const checkUserInput = () => {
 
-        var placeholder = userInput.length - 1;
+        var shortpos = userInput.length - 1;
 
-        if (userInput[placeholder] === setText[placeholder]) correctness[placeholder] = 1; //correct
-        else if (userInput[placeholder] !== setText[placeholder]) correctness[placeholder] = 0; //incorrect
+        if (userInput[shortpos] === termArrTester[shortpos]) accuractChars++; //correct
+        accuracy = userInput.length / accuractChars;
+        console.log(accuractChars, accuracy);
 
-        if (correctness[placeholder] === 0) console.log("Incorrect letter, app ln 55");
-        console.log(correctness);
+        //else if (userInput[shortpos] !== term[shortpos]) correctness[shortpos] = 0; //incorrect
+        //if (correctness[shortpos] === 0) console.log("Incorrect letter, app ln 55");
     }
 
 
@@ -85,11 +98,9 @@ function App() {
                 <Texts>
                     <div className="setText">
                         <br />
-                        Term = {term}
+                        Term = {term} |----| Definition = {termDef}
                         <br />
-                        Definition = {termDef}
-                        <br />
-
+                        {termTestString}
 
                     </div>
                     <div className="userText">
