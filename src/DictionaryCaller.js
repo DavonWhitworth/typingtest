@@ -55,14 +55,13 @@ export default function DictionaryCaller(props) {
                 })
         }
         currentWord = Capitalize(currentWord);
-        console.log("current word = " + currentWord);
     }, [])
 
 
 
 
-    props.term(JSON.stringify(currentWord))
-    props.def(JSON.stringify(define))
+    props.term(currentWord)
+    props.def(define)
 
 
     return (<>

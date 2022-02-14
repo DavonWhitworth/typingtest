@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
 import DictionaryCaller from "./DictionaryCaller";
@@ -45,6 +46,18 @@ function App() {
 
 
     useEffect(() => {
+
+        async function fetchdata() {
+            const data = await axios.get(baseURL);
+            setTerm(data.data[0].word);
+            setDef(data.data[0].meanings[0].definitions[0].definition);
+        }
+
+        fetchdata();
+
+    }, [, activeTermSlot])
+
+    useEffect(() => {
         //checkUserInput();
         console.log("userInput = " + userInput);
     }, [userInput]);
@@ -53,8 +66,8 @@ function App() {
 
     useEffect(() => {
         setTermString(term + ":" + " " + termDef);
-        //const termSplit = term.split("");
-        // const termDefSplit = termDef.split("");
+        const termSplit = term.split("");
+        const termDefSplit = termDef.split("");
         setArrTester(": ");
     }, [, term, termDef])
 
@@ -85,11 +98,11 @@ function App() {
 
 
 
-
+    //<DictionaryCaller term={setTerm} def={setTermDef} />
     //start of texts div; <DictionaryCaller/> // term={setTerm()} termDef={setTermDef()}
     return (
         <>
-            <DictionaryCaller term={setTerm} def={setTermDef} />
+
             <TestBlock>
                 <nav>
                     Reset & Timer place
