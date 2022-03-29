@@ -89,15 +89,12 @@ function App() {
         //if (correctness[shortpos] === 0) console.log("Incorrect letter, app ln 55");
     }*/
 
-    const info = axios.create({
-        baseURL: "https://api.dictionaryapi.dev/api/v2/entries/en/"
-    })
+    const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
     const getDefinition = (word) => {
-        axios.get(info.baseURL + word)
+        axios.get(baseURL + word)
             .then(response => {
-                var definition = response.data[0].meanings[0].definitions[0].definition;
-                return Capitalize(definition);
+                setTermDef(Capitalize(JSON.stringify(response.data[0].meanings[0].definitions[0].definition)));
             })
     }
 
