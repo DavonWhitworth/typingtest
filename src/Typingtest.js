@@ -1,7 +1,7 @@
-import axios from "axios";
+
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
-import DictionaryCaller from "./DictionaryCaller";
+import TermAPI from "./TermAPI";
 
 //import { TextInput } from 'react-native'
 
@@ -24,53 +24,46 @@ const Texts = Styled.nav`
 
 
 `
-//margin: 30px;
 
-
-
-
+const Capitalize = (str) => {
+    return (str.charAt(0).toUpperCase() + str.slice(1));
+}
 
 function App() {
 
+
+
+
+    const words = ["quantity", "quality", "inefficacious", "abandon", "authority", "award", "aware",
+        "awful", "assignment", "artistic", "artist", "behavior", "battery", "benefit", "board", "carefully",
+        "ascender", "wellness", "asthenia", "gondolier", "toilsome", "briefcases", "postbellum", "margravates",
+        "rocamboles", "teepee", "superventions", "cay", "orphaned", "width", "azimuths", "trails", "receivership",
+        "competition", "considerable", "consistent", "defendant", "discrimination", "dramatic", "electronic",
+        "everybody", "foundation", "government", "independent", "involvement", "landscape", "location", "manufacturer", "management", "maintenance",
+        "moderate", "modern", "modest", "mystery", "narrative", "natural", "necessary", "neighbor", "negotiation",
+        "negotiate", "nonetheless", "nothing", "nuclear", "observation", "observe", "observer", "reform",
+        "occupation", "occupy", "Olympic", "organize", "participant", "participate", "partnership", "policy",
+        "political", "pollution", "population", "presentation", "rank", "refugee", "relax"];
+
+
+    const [currentWord, setCurrentWord] = useState(Capitalize(words[Math.trunc(Math.random() * words.length)]))
     const [userInput, setUserInput] = useState([])
+    const [termDef, setTermDef] = useState("");
 
-    const setString = "This is test text for my typing test";
-    var setText = setString.split("");
-    var accuractChars;
-    var accuracy;
-
-    const [term, setTerm] = useState();
-    const [termDef, setTermDef] = useState();
-    const [termTestString, setTermString] = useState();
-    const [termArrTester, setArrTester] = useState();
-
-
-    useEffect(() => {
-
-        async function fetchdata() {
-            const data = await axios.get(baseURL);
-            setTerm(data.data[0].word);
-            setDef(data.data[0].meanings[0].definitions[0].definition);
-        }
-
-        fetchdata();
-
-    }, [, activeTermSlot])
 
     useEffect(() => {
         //checkUserInput();
         console.log("userInput = " + userInput);
     }, [userInput]);
 
-    //use effect to handle dictionary caller
 
-    useEffect(() => {
+    /*useEffect(() => {
         setTermString(term + ":" + " " + termDef);
-        const termSplit = term.split("");
-        const termDefSplit = termDef.split("");
+        //const termSplit = term.split();
+        //const termDefSplit = termDef.split();
         setArrTester(": ");
     }, [, term, termDef])
-
+*/
 
     const SettingUserInput = (data) => {
         setUserInput(data.target.value.split(""));
@@ -82,7 +75,7 @@ function App() {
     //Validates correctness of userInput over setText but correctness [] does not record in different elements
 
     /*loop through arrays to check the accuracy of user's input, 
-    record accuracy in correctness[], 1 correct; 0 incorrect;*/
+    record accuracy in correctness[], 1 correct; 0 incorrect;
     const checkUserInput = () => {
 
         var shortpos = userInput.length - 1;
@@ -93,15 +86,14 @@ function App() {
 
         //else if (userInput[shortpos] !== term[shortpos]) correctness[shortpos] = 0; //incorrect
         //if (correctness[shortpos] === 0) console.log("Incorrect letter, app ln 55");
-    }
+    }*/
 
 
 
 
-    //<DictionaryCaller term={setTerm} def={setTermDef} />
-    //start of texts div; <DictionaryCaller/> // term={setTerm()} termDef={setTermDef()}
     return (
         <>
+            <TermAPI term={this.currentWord} setTermDef={this.setTermDef} />
 
             <TestBlock>
                 <nav>
@@ -111,9 +103,8 @@ function App() {
                 <Texts>
                     <div className="setText">
                         <br />
-                        Term = {term} |----| Definition = {termDef}
+                        Term = {currentWord} |----| Definition = {termDef}
                         <br />
-                        {termTestString}
 
                     </div>
                     <div className="userText">

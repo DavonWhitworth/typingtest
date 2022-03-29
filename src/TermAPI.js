@@ -1,20 +1,31 @@
+import React, { useState } from 'react';
 import axios from "axios";
 
-
-const words = ["quantity", "quality", "inefficacious", "abandon", "authority", "award", "aware",
-    "awful", "assignment", "artistic", "artist", "behavior", "battery", "benefit", "board", "carefully",
-    "ascender", "wellness", "asthenia", "gondolier", "toilsome", "briefcases", "postbellum", "margravates",
-    "rocamboles", "teepee", "superventions", "cay", "orphaned", "width", "azimuths", "trails", "receivership",
-    "competition", "considerable", "consistent", "defendant", "discrimination", "dramatic", "electronic",
-    "everybody", "foundation", "government", "independent", "involvement", "landscape", "location", "manufacturer", "management", "maintenance",
-    "moderate", "modern", "modest", "mystery", "narrative", "natural", "necessary", "neighbor", "negotiation",
-    "negotiate", "nonetheless", "nothing", "nuclear", "observation", "observe", "observer", "reform",
-    "occupation", "occupy", "Olympic", "organize", "participant", "participate", "partnership", "policy",
-    "political", "pollution", "population", "presentation", "rank", "refugee", "relax"];
-
-
 const info = axios.create({
-    baseURL: "https://api.dictionaryapi.dev/api/v2/entries/en/" + words[Math.trunc(Math.random() * words.length)],
+    baseURL: "https://api.dictionaryapi.dev/api/v2/entries/en/hello"
 })
 
-export default info;
+const Capitalize = (str) => {
+    return (str.charAt(0).toUpperCase() + str.slice(1));
+}
+
+const [def, setDef] = useState("Plese wait a moment");
+
+const getDefinition = (word) => {
+    axios.get(info.baseURL + word)
+        .then(response => {
+            var definition = response.data[0].meanings[0].definitions[0].definition;
+            return Capitalize(definition);
+        })
+
+}
+
+const TermAPI = (props) => {
+    setDef(getDefinition(props.term))
+    props.setTermDef({ def })
+
+
+}
+
+
+export default TermAPI;
