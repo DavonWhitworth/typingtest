@@ -17,7 +17,6 @@ const getDefinition = (word) => {
             var definition = response.data[0].meanings[0].definitions[0].definition;
             return Capitalize(definition);
         })
-
 }
 
 const TermAPI = (props) => {

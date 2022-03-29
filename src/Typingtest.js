@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
-import TermAPI from "./TermAPI";
+//import TermAPI from "./TermAPI";
+import axios from "axios";
 
 //import { TextInput } from 'react-native'
 
@@ -59,8 +60,8 @@ function App() {
 
     /*useEffect(() => {
         setTermString(term + ":" + " " + termDef);
-        //const termSplit = term.split();
-        //const termDefSplit = termDef.split();
+        const termSplit = term.split();
+        const termDefSplit = termDef.split();
         setArrTester(": ");
     }, [, term, termDef])
 */
@@ -88,12 +89,29 @@ function App() {
         //if (correctness[shortpos] === 0) console.log("Incorrect letter, app ln 55");
     }*/
 
+    const info = axios.create({
+        baseURL: "https://api.dictionaryapi.dev/api/v2/entries/en/"
+    })
+
+    const getDefinition = (word) => {
+        axios.get(info.baseURL + word)
+            .then(response => {
+                var definition = response.data[0].meanings[0].definitions[0].definition;
+                return Capitalize(definition);
+            })
+    }
+
+    useEffect(() => {
+        setTermDef(getDefinition(currentWord));
+
+    }, [])
 
 
+    //<TermAPI term={this.currentWord} setTermDef={this.setTermDef} />
 
     return (
         <>
-            <TermAPI term={this.currentWord} setTermDef={this.setTermDef} />
+
 
             <TestBlock>
                 <nav>
