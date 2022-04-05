@@ -1,5 +1,6 @@
 import React from "react"
-import Typingtest from './Typingtest';
+import Typingtest from './typingtest';
+
 
 
 

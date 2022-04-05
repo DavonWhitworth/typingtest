@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
-//import TermAPI from "./TermAPI";
 import axios from "axios";
+//import Textview from "./textview";
 
 //import { TextInput } from 'react-native'
 
@@ -55,16 +54,13 @@ function App() {
     useEffect(() => {
         //checkUserInput();
         console.log("userInput = " + userInput);
+        if (userInput.length === termDef.length) {
+            setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)]));
+            getDefinition();
+            setTermDef([]);
+
+        }
     }, [userInput]);
-
-
-    /*useEffect(() => {
-        setTermString(term + ":" + " " + termDef);
-        const termSplit = term.split();
-        const termDefSplit = termDef.split();
-        setArrTester(": ");
-    }, [, term, termDef])
-*/
 
     const SettingUserInput = (data) => {
         setUserInput(data.target.value.split(""));
@@ -72,29 +68,14 @@ function App() {
     }
 
 
-
-    //Validates correctness of userInput over setText but correctness [] does not record in different elements
-
-    /*loop through arrays to check the accuracy of user's input, 
-    record accuracy in correctness[], 1 correct; 0 incorrect;
-    const checkUserInput = () => {
-
-        var shortpos = userInput.length - 1;
-
-        if (userInput[shortpos] === termArrTester[shortpos]) accuractChars++; //correct
-        accuracy = userInput.length / accuractChars;
-        console.log(accuractChars, accuracy);
-
-        //else if (userInput[shortpos] !== term[shortpos]) correctness[shortpos] = 0; //incorrect
-        //if (correctness[shortpos] === 0) console.log("Incorrect letter, app ln 55");
-    }*/
-
     const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
-    const getDefinition = (word) => {
-        axios.get(baseURL + word)
+    const getDefinition = () => {
+        axios.get(baseURL + currentWord)
             .then(response => {
-                setTermDef(Capitalize(JSON.stringify(response.data[0].meanings[0].definitions[0].definition)));
+                const tempDef = JSON.stringify(response.data[0].meanings[0].definitions[0].definition);
+                //remove quotes from api         // tempDef
+                setTermDef(Capitalize(tempDef));
             })
     }
 
@@ -104,7 +85,7 @@ function App() {
     }, [])
 
 
-    //<TermAPI term={this.currentWord} setTermDef={this.setTermDef} />
+    //<Textview term={currentWord} />
 
     return (
         <>
@@ -118,7 +99,9 @@ function App() {
                 <Texts>
                     <div className="setText">
                         <br />
-                        Term = {currentWord} |----| Definition = {termDef}
+                        Term = {currentWord}
+                        <br />
+                        Definition = {termDef}
                         <br />
 
                     </div>
@@ -128,12 +111,16 @@ function App() {
                             <input
                                 type="text"
                                 name="usertext"
-                                onChange={SettingUserInput}
-                                placeholder="Start typing..." />
+                                onChange={(e) => setUserInput(e.target.value)}
+                                placeholder="Start typing..."
+                                autoComplete="off"
+                                value={userInput}
+                            />
 
                         </form>
                     </div>
                 </Texts>
+
             </TestBlock>
 
         </>
@@ -142,3 +129,4 @@ function App() {
 
 export default App;
 // SettingUserInput(data)    from onchange on input
+//<TermAPI setDef={setTermDef} term={currentWord} />

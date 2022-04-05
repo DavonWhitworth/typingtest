@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
+/*import React, { useState } from 'react';
 import axios from "axios";
+import { useEffect } from 'react/cjs/react.production.min';
 
-const info = axios.create({
-    baseURL: "https://api.dictionaryapi.dev/api/v2/entries/en/hello"
-})
+const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
 const Capitalize = (str) => {
     return (str.charAt(0).toUpperCase() + str.slice(1));
 }
 
-const [def, setDef] = useState("Plese wait a moment");
 
-const getDefinition = (word) => {
-    axios.get(info.baseURL + word)
-        .then(response => {
-            var definition = response.data[0].meanings[0].definitions[0].definition;
-            return Capitalize(definition);
-        })
+
+function TermAPI(props) {
+
+    const getDefinition = (props) => {
+        axios.get(baseURL + props.term)
+            .then(response => {
+                var definition = Capitalize(JSON.stringify(response.data[0].meanings[0].definitions[0].definition));
+                return Capitalize(definition);
+            })
+    }
+    props.setDef(getDefinition());
+    //props.setDef(getDefinition(props.term))
+
+    return (
+        <>
+            <h1>api return block</h1>
+        </>
+    )
+
+
 }
 
-const TermAPI = (props) => {
-    setDef(getDefinition(props.term))
-    props.setTermDef({ def })
 
-
-}
-
-
-export default TermAPI;
+export default TermAPI;*/
