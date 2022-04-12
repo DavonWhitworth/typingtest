@@ -3,8 +3,6 @@ import Typingtest from './typingtest';
 
 
 
-
-
 function App() {
 
 
