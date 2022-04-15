@@ -57,17 +57,15 @@ function App() {
     const [netWPM, setNetWPM] = useState(0);
     const [roundStartTime, setRoundStartTime] = useState(0);
     const [wrongChar, setWrongChar] = useState(0);
-    let userSplit = []; //userSplit = userInput.split("");
     let defSplit = [];
 
 
-    const getDefinition = () => {
-        axios.get(baseURL + currentWord)
-            .then(response => {
-                let tempDef = JSON.stringify(response.data[0].meanings[0].definitions[0].definition);
-                tempDef = tempDef.slice(1, -1);
-                setTermDef(Capitalize(tempDef));
-            })
+    const getDefinition = async () => {
+        let tempDef = await axios(baseURL + currentWord);
+        tempDef = JSON.stringify(tempDef.data[0].meanings[0].definitions[0].definition);
+        tempDef = tempDef.slice(1, -1);
+        setTermDef(tempDef);
+        return;
     }
 
     useEffect(() => {
@@ -107,11 +105,12 @@ function App() {
     }
 
     const endRound = () => {
+
         const roundTime = gameTime - roundStartTime;
         calcWPM(roundTime);
         setUserInput("");
         setWrongChar(0);
-        //setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
+        setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
         getDefinition();
 
     }
@@ -120,7 +119,7 @@ function App() {
     //(# of char / 5) / time(min)
     const calcWPM = (time) => {
         defSplit = termDef.split("");
-        userSplit = userInput.split("");
+        let userSplit = userInput.split("");
         let a = userSplit.length / 5;
         a = a - wrongChar;
         if (a <= 0) a = 1;
@@ -173,5 +172,3 @@ function App() {
 }
 
 export default App;
-// SettingUserInput(data)    from onchange on input
-//<TermAPI setDef={setTermDef} term={currentWord} />
