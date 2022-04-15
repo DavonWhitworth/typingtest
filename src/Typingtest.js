@@ -56,18 +56,17 @@ function App() {
     const [timerActive, setTimerActive] = useState(false);
     const [netWPM, setNetWPM] = useState(0);
     const [roundStartTime, setRoundStartTime] = useState(0);
+    const [wrongChar, setWrongChar] = useState(0);
     let userSplit = []; //userSplit = userInput.split("");
     let defSplit = [];
-    var wrongChar = 0;
+
 
     const getDefinition = () => {
-        //setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)]));
         axios.get(baseURL + currentWord)
             .then(response => {
                 let tempDef = JSON.stringify(response.data[0].meanings[0].definitions[0].definition);
                 tempDef = tempDef.slice(1, -1);
                 setTermDef(Capitalize(tempDef));
-                defSplit = tempDef.split("");
             })
     }
 
@@ -76,22 +75,23 @@ function App() {
     }, [])
 
     useEffect(() => {
+        if (userInput.length === termDef.length && gameActive) endRound(); //round (term) complete, end round, calculate wpm, setup next round
         setGameActive(true);
-        userSplit = userInput.split("");
         if (gameActive && !timerActive) timer(); //start game timer, this makes only one timer active and then round time in calculated with subtracting time at start of each round
         if (userInput.split("").length === 1) setRoundStartTime(gameTime);
-        if (userInput.length === termDef.length) endRound(); //round (term) complete, end round, calculate wpm, setup next round
+
     }, [userInput]);
 
     const onUserInput = ({ key: e }) => {
-        if (e === ' ') setUserInput(prevUserInput => prevUserInput + e);
-        else if (e === 'Shift' || e === 'Control') return;
-        else if (e === 'Backspace') setUserInput(prevUserInput => prevUserInput.slice(0, -1));
-        else if ((/[a-zA-Z]/).test(e) || (e === '(' || e === ')')) {
-            //if (e === defSplit[userSplit.length]) {
-            setUserInput(prevUserInput => prevUserInput + e)
-            // }
-        }
+        defSplit = termDef.split("");
+        //if (e === ' ') setUserInput(prevUserInput => prevUserInput + e);
+        if (e === 'Shift' || e === 'Control') {
+            return;
+        } else if (e === 'Backspace') {
+            setUserInput(prevUserInput => prevUserInput.slice(0, -1));
+        } else if (e === defSplit[userInput.length]) {
+            setUserInput(prevUserInput => prevUserInput + e);
+        } else setWrongChar(prevwrongChar => prevwrongChar + 1);
         return;
     }
 
@@ -110,7 +110,7 @@ function App() {
         const roundTime = gameTime - roundStartTime;
         calcWPM(roundTime);
         setUserInput("");
-        wrongChar = 0;
+        setWrongChar(0);
         //setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
         getDefinition();
 
@@ -119,15 +119,14 @@ function App() {
 
     //(# of char / 5) / time(min)
     const calcWPM = (time) => {
-        for (let i = 0; i < userInput.length; i++) {
-            if (userSplit[i] !== defSplit[i]) wrongChar++;
-        }
-
+        defSplit = termDef.split("");
+        userSplit = userInput.split("");
         let a = userSplit.length / 5;
         a = a - wrongChar;
+        if (a <= 0) a = 1;
         const roundTime = time / 60;
-        setNetWPM(a / roundTime);
-        console.log("a: ", a, " timer: ", time, " roundlength(mins): ", roundTime, " wrongchar: ", wrongChar);
+        setNetWPM(parseFloat((a / roundTime)).toFixed(2));
+        console.log({ a }, { time }, { roundTime }, { wrongChar });
         return;
     }
 
