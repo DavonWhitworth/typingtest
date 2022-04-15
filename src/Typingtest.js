@@ -82,8 +82,9 @@ function App() {
 
     const onUserInput = ({ key: e }) => {
         defSplit = termDef.split("");
-        //if (e === ' ') setUserInput(prevUserInput => prevUserInput + e);
-        if (e === 'Shift' || e === 'Control') {
+        if (e === 'Escape') {
+            newRound();
+        } else if (e === 'Shift') { //Does not punish user for using shift
             return;
         } else if (e === 'Backspace') {
             setUserInput(prevUserInput => prevUserInput.slice(0, -1));
@@ -95,16 +96,14 @@ function App() {
 
     useEventListener("keydown", onUserInput)
 
-    const timer = () => {
+    const timer = () => { //Game timer, increases in 1/2 second intervals for more accuracy and incase a short term is completed under a second
         setTimerActive(true);
-        //while (timerActive) {
         setInterval(() => {
-            setGameTime(prevgameTime => prevgameTime + 1);
-        }, 1000);
-        //}
+            setGameTime(prevgameTime => prevgameTime + 0.5);
+        }, 500);
     }
 
-    const endRound = () => {
+    const endRound = () => { //fired when user fnishes the round, similar to newround but does not calculate WPM so incorrect speed is displayed
 
         const roundTime = gameTime - roundStartTime;
         calcWPM(roundTime);
@@ -113,6 +112,13 @@ function App() {
         setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
         getDefinition();
 
+    }
+
+    const newRound = () => { //fired when escape key is pushed
+        setUserInput("");
+        setWrongChar(0);
+        setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
+        getDefinition();
     }
 
 
@@ -135,11 +141,8 @@ function App() {
 
 
             <TestBlock>
-                <nav>
-                    Data placeholder
-                </nav>
-                <br />
-                <Description>Test your typing speed while learning and consolidating vocabulary, new wpm per term. </Description>
+
+                <Description>Test your typing speed while learning and consolidating vocabulary, new wpm per term. Click the "Escape" key for a new round.</Description>
 
                 <Texts>
                     <div className="setText">
