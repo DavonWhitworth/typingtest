@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
 import axios from "axios";
+import useEventListener from "./useEventListener";
 
 
 //Possible names: SpeedVocab, VocabTyper, SpeedTyper
@@ -42,24 +43,25 @@ function App() {
         "everybody", "foundation", "government", "independent", "involvement", "landscape", "location", "manufacturer",
         "management", "maintenance", "moderate", "modern", "modest", "mystery", "narrative", "natural", "necessary",
         "neighbor", "negotiation", "negotiate", "nonetheless", "nothing", "nuclear", "observation", "observe", "observer",
-        "reform", "occupation", "occupy", "Olympic", "organize", "partnership", "policy",
-        "political", "pollution", "population", "presentation", "rank", "refugee", "relax"];
+        "reform", "occupation", "occupy", "organize", "partnership", "policy",
+        "political", "pollution", "population", "presentation", "rank", "relax"];
 
     function Capitalize(str) { return (str.charAt(0).toUpperCase() + str.slice(1)); } //capitalize given string for approriate grammer visual
-    const [currentWord, setCurrentWord] = useState(Capitalize(words[Math.trunc(Math.random() * words.length)]))
-    const [userInput, setUserInput] = useState('')
-    const [termDef, setTermDef] = useState('');
+    const [currentWord, setCurrentWord] = useState(Capitalize(words[Math.trunc(Math.random() * words.length)])) //
+    const [userInput, setUserInput] = useState("");
+    const [termDef, setTermDef] = useState("");
     const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
     const [gameActive, setGameActive] = useState(false);
     const [gameTime, setGameTime] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
     const [netWPM, setNetWPM] = useState(0);
     const [roundStartTime, setRoundStartTime] = useState(0);
-    let userSplit = userInput.split("");
-    let defSplit = "";
+    let userSplit = []; //userSplit = userInput.split("");
+    let defSplit = [];
     var wrongChar = 0;
 
     const getDefinition = () => {
+        //setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)]));
         axios.get(baseURL + currentWord)
             .then(response => {
                 let tempDef = JSON.stringify(response.data[0].meanings[0].definitions[0].definition);
@@ -75,32 +77,25 @@ function App() {
 
     useEffect(() => {
         setGameActive(true);
-        if (gameActive && !timerActive) timer(); //start game timer, timeractive avoids interval multiplier each time userinput changes
+        userSplit = userInput.split("");
+        if (gameActive && !timerActive) timer(); //start game timer, this makes only one timer active and then round time in calculated with subtracting time at start of each round
         if (userInput.split("").length === 1) setRoundStartTime(gameTime);
         if (userInput.length === termDef.length) endRound(); //round (term) complete, end round, calculate wpm, setup next round
     }, [userInput]);
 
-    useEffect(() => {
-        document.addEventListener('keydown', event => {
-            //console.log(event);
-            onUserInput(event.key);
-        });
-
-    }, [])
-
-    const onUserInput = (e) => {
-        //console.log(defSplit);
-        if (e !== (' ' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z')) {
-            wrongChar++;
-            return;
+    const onUserInput = ({ key: e }) => {
+        if (e === ' ') setUserInput(prevUserInput => prevUserInput + e);
+        else if (e === 'Shift' || e === 'Control') return;
+        else if (e === 'Backspace') setUserInput(prevUserInput => prevUserInput.slice(0, -1));
+        else if ((/[a-zA-Z]/).test(e) || (e === '(' || e === ')')) {
+            //if (e === defSplit[userSplit.length]) {
+            setUserInput(prevUserInput => prevUserInput + e)
+            // }
         }
-        if (e === (' ' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z')) {
-            if (e === defSplit[userInput.length]) setUserInput(prevUserInput => prevUserInput + e)
-        }
-
-        else return
-
+        return;
     }
+
+    useEventListener("keydown", onUserInput)
 
     const timer = () => {
         setTimerActive(true);
@@ -116,7 +111,7 @@ function App() {
         calcWPM(roundTime);
         setUserInput("");
         wrongChar = 0;
-        setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
+        //setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
         getDefinition();
 
     }
@@ -132,36 +127,11 @@ function App() {
         a = a - wrongChar;
         const roundTime = time / 60;
         setNetWPM(a / roundTime);
-        console.log("a: ", a, " timer: ", time, " roundlength: ", roundTime, " wrongchar: ", wrongChar);
+        console.log("a: ", a, " timer: ", time, " roundlength(mins): ", roundTime, " wrongchar: ", wrongChar);
         return;
     }
 
 
-
-
-
-
-    /**     start of form
-       * <textarea
-                                      onChange={(e) => onUserInput(e.target.value)}
-                                      value={userInput}
-                                      autoFocus
-                                      style={{
-                                          width: "100%",
-                                          height: "400px",
-                                          opacity: "100%",
-                                          backgroundColor: "transparent",
-                                          border: "none",
-                                          outline: "none",
-                                          color: "transparent",
-                                          textDecoration: "none",
-                                          resize: "none",
-                                      }}
-                                      spellCheck={false}
-                                  />
-       */
-
-    // line 118: onChange={(e) => setUserInput(e.target.value)}
     return (
         <>
 
@@ -181,12 +151,9 @@ function App() {
                         Definition = {termDef}
                         <br />
                     </div>
-                    <div className="userText">
+                    <div className="datatracking">
                         <br />
-                        <form>
 
-                            <br />
-                        </form>
                         Data tracking:
                         <br />
                         userInput = {userInput}
