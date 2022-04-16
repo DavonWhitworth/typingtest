@@ -12,11 +12,9 @@ const TestBlock = Styled.div`
 background: #262626;
 color: #ACBFA4;
 padding: 20px;
-border-radius: 20px;
-position: realtive;
-position: 'absolute', left: '50%', top: '50%',
-transform: 'translate(-50%, -50%)'
-width: 50px;
+height: 100%,
+width: 100%,
+
 `
 
 const DoneChar = Styled.text``
@@ -59,10 +57,10 @@ function App() {
     const [roundStartTime, setRoundStartTime] = useState(0);
     const [wrongChar, setWrongChar] = useState(0);
     const [avgWPM, setavgWPM] = useState(0);
-    const [numOfRounds, setnumOfRounds] = useState(0);
-    let defSplit = [];
-    let sessionWPMs = [];
-
+    const [numOfRounds, setnumOfRounds] = useState(0); //not used in mechanics anymore, just deugging logs
+    const [sessionWPM, setsessionWPM] = useState([]);
+    var defSplit = [];
+    var avgNET = 0;
 
 
     const getDefinition = async (word) => {
@@ -90,6 +88,15 @@ function App() {
         if (userInput.split("").length === 1) setRoundStartTime(gameTime);
 
     }, [userInput]);
+
+    useEffect(() => {
+        for (let i = 0; i < sessionWPM.length; i++) {
+            avgNET = parseFloat(avgNET) + parseFloat(sessionWPM[i]);
+            //console.log({ i }, { numOfRounds }, { avgNET }, "session", sessionWPM) //data tracking for loop
+        }
+        avgNET = parseFloat(avgNET / sessionWPM.length).toFixed(2);
+        setavgWPM(avgNET)
+    }, [sessionWPM])
 
     const onUserInput = ({ key: e }) => {
         defSplit = termDef.split("");
@@ -131,7 +138,7 @@ function App() {
     }
 
 
-    //(# of char / 5) / time(min)
+    //( (# of char / 5)-errors ) / time(in minutes) //stardard way of calculating wpm
     const calcWPM = (time) => {
         defSplit = termDef.split("");
         let userSplit = userInput.split("");
@@ -139,19 +146,10 @@ function App() {
         a = a - wrongChar;
         if (a <= 0) a = 1;
         const roundTime = time / 60;
-        const wpmCalc = parseFloat((a / roundTime)).toFixed(2)
-        setNetWPM(wpmCalc);
-        sessionWPMs[numOfRounds] = wpmCalc;
-        console.log("sessionwpm's", sessionWPMs)
-        for (let i = 0; i < numOfRounds; i++) {
-            var avgNET = 0
-            avgNET = avgNET + sessionWPMs[i];
-            avgNET = parseFloat(avgNET / sessionWPMs.length).toFixed(2);
-            console.log({ i }, { numOfRounds }, { avgNET })
-        }
+        const wpmCalc = parseFloat((a / roundTime)).toFixed(2);
         setnumOfRounds(prevnumOfRounds => prevnumOfRounds + 1);
-        setavgWPM(avgNET)
-
+        setNetWPM(wpmCalc);
+        setsessionWPM(prevsessionWPM => [...prevsessionWPM, wpmCalc]);
         //console.log({ a }, { time }, { roundTime }, { wrongChar }); //Caculation variables
         return;
     }
@@ -187,7 +185,7 @@ function App() {
                     <div className="datatracking">
                         <br />
                         netWPM of previous term = {netWPM} <br />
-                        Average netWPM for session = {avgWPM}
+                        Average netWPM for session = {avgWPM || 0}
                     </div>
                 </Texts>
 
