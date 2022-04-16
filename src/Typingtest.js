@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import Styled from 'styled-components';
 import axios from "axios";
 import useEventListener from "./useEventListener";
+//import Styles from './style.css';
 
 
 //Possible names: SpeedVocab, VocabTyper, SpeedTyper
@@ -17,16 +18,16 @@ position: 'absolute', left: '50%', top: '50%',
 transform: 'translate(-50%, -50%)'
 width: 50px;
 `
-//font-size: 1.5em;
+
+const DoneChar = Styled.text``
+const NotDoneChar = Styled.text``
+
 const nav = Styled.nav`
 position: absolute;
 left: 50%;
-
 `
-const Texts = Styled.nav`
+const Texts = Styled.nav``
 
-
-`
 const Description = Styled.header`
 transform: translate(0, -50%); 
 `
@@ -44,10 +45,10 @@ function App() {
         "management", "maintenance", "moderate", "modern", "modest", "mystery", "narrative", "natural", "necessary",
         "neighbor", "negotiation", "negotiate", "nonetheless", "nothing", "nuclear", "observation", "observe", "observer",
         "reform", "occupation", "occupy", "organize", "partnership", "policy",
-        "political", "pollution", "population", "presentation", "rank", "relax"];
+        "political", "pollution", "presentation", "rank", "relax"];
 
     function Capitalize(str) { return (str.charAt(0).toUpperCase() + str.slice(1)); } //capitalize given string for approriate grammer visual
-    const [currentWord, setCurrentWord] = useState(Capitalize(words[Math.trunc(Math.random() * words.length)])) //
+    const [currentWord, setCurrentWord] = useState("") //Capitalize(words[Math.trunc(Math.random() * words.length)])
     const [userInput, setUserInput] = useState("");
     const [termDef, setTermDef] = useState("");
     const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
@@ -57,19 +58,29 @@ function App() {
     const [netWPM, setNetWPM] = useState(0);
     const [roundStartTime, setRoundStartTime] = useState(0);
     const [wrongChar, setWrongChar] = useState(0);
+    const [avgWPM, setavgWPM] = useState(0);
+    const [numOfRounds, setnumOfRounds] = useState(0);
     let defSplit = [];
+    let sessionWPMs = [];
 
 
-    const getDefinition = async () => {
-        let tempDef = await axios(baseURL + currentWord);
+
+    const getDefinition = async (word) => {
+        setCurrentWord(word);
+        let tempDef = await axios(baseURL + word);
         tempDef = JSON.stringify(tempDef.data[0].meanings[0].definitions[0].definition);
         tempDef = tempDef.slice(1, -1);
         setTermDef(tempDef);
         return;
     }
 
+    const setNewWord = () => { //Helper function to avoid returning mismatched definition to term
+        let word = Capitalize(words[Math.trunc(Math.random() * words.length)]);
+        getDefinition(word);
+    }
+
     useEffect(() => {
-        getDefinition()
+        setNewWord();
     }, [])
 
     useEffect(() => {
@@ -82,7 +93,7 @@ function App() {
 
     const onUserInput = ({ key: e }) => {
         defSplit = termDef.split("");
-        if (e === 'Escape') {
+        if (e === 'Escape') { //New round option
             newRound();
         } else if (e === 'Shift') { //Does not punish user for using shift
             return;
@@ -96,7 +107,7 @@ function App() {
 
     useEventListener("keydown", onUserInput)
 
-    const timer = () => { //Game timer, increases in 1/2 second intervals for more accuracy and incase a short term is completed under a second
+    const timer = () => { //Game timer, increases in 1/2 second intervals for more accuracy and incase a short term is completed under a second, quicker causes issues
         setTimerActive(true);
         setInterval(() => {
             setGameTime(prevgameTime => prevgameTime + 0.5);
@@ -109,16 +120,14 @@ function App() {
         calcWPM(roundTime);
         setUserInput("");
         setWrongChar(0);
-        setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
-        getDefinition();
+        setNewWord();
 
     }
 
     const newRound = () => { //fired when escape key is pushed
         setUserInput("");
         setWrongChar(0);
-        setCurrentWord(Capitalize(words[Math.trunc(Math.random() * words.length)])); //new round, use
-        getDefinition();
+        setNewWord();
     }
 
 
@@ -130,11 +139,31 @@ function App() {
         a = a - wrongChar;
         if (a <= 0) a = 1;
         const roundTime = time / 60;
-        setNetWPM(parseFloat((a / roundTime)).toFixed(2));
-        console.log({ a }, { time }, { roundTime }, { wrongChar });
+        const wpmCalc = parseFloat((a / roundTime)).toFixed(2)
+        setNetWPM(wpmCalc);
+        sessionWPMs[numOfRounds] = wpmCalc;
+        console.log("sessionwpm's", sessionWPMs)
+        for (let i = 0; i < numOfRounds; i++) {
+            var avgNET = 0
+            avgNET = avgNET + sessionWPMs[i];
+            avgNET = parseFloat(avgNET / sessionWPMs.length).toFixed(2);
+            console.log({ i }, { numOfRounds }, { avgNET })
+        }
+        setnumOfRounds(prevnumOfRounds => prevnumOfRounds + 1);
+        setavgWPM(avgNET)
+
+        //console.log({ a }, { time }, { roundTime }, { wrongChar }); //Caculation variables
         return;
     }
 
+    const TextViewer = () => { //makes the divs for app view to show user progression through text
+        const userSplit = userInput.split("");
+        const completedCharsString = userInput.substring(0, userSplit.length)
+        const completedCharsDiv = <DoneChar style={{ color: "green" }}> {completedCharsString}</DoneChar >
+        const incompletedCharsString = termDef.substring(userSplit.length)
+        const incompletedCharsDiv = <NotDoneChar style={{ color: "rgb(255, 128, 128)" }}>{incompletedCharsString}</NotDoneChar>
+        return <>{completedCharsDiv}{incompletedCharsDiv}</>;
+    }
 
     return (
         <>
@@ -142,28 +171,23 @@ function App() {
 
             <TestBlock>
 
-                <Description>Test your typing speed while learning and consolidating vocabulary, new wpm per term. Click the "Escape" key for a new round.</Description>
+                <Description>Start typing to begin, new wpm per term. Click the "Escape" key for a new term.</Description>
+
 
                 <Texts>
-                    <div className="setText">
+                    <div className="Texts">
                         <br />
                         Term = {currentWord}
                         <br />
-                        Definition = {termDef}
-                        <br />
+                        Definition =
+                        <TextViewer />
+
+
                     </div>
                     <div className="datatracking">
                         <br />
-
-                        Data tracking:
-                        <br />
-                        userInput = {userInput}
-                        <br />
-                        Timer = {gameTime}
-                        <br />
-                        Calculation variables: Wrongchars = {wrongChar}; roundStartTime = {roundStartTime};
-                        <br />
-                        netWPM = {netWPM}
+                        netWPM of previous term = {netWPM} <br />
+                        Average netWPM for session = {avgWPM}
                     </div>
                 </Texts>
 
