@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import Styles from "./global.css";
 import Styled from 'styled-components';
 import axios from "axios";
 import useEventListener from "./useEventListener";
@@ -7,31 +8,41 @@ import useEventListener from "./useEventListener";
 
 //Possible names: SpeedVocab, VocabTyper, SpeedTyper
 
-
-const TestBlock = Styled.div`
-background: #262626;
-color: #ACBFA4;
-padding: 20px;
-height: 100%,
-width: 100%,
-
+const MainContainer = Styled.div`
+    height: 100%;
+    width: 60%;
+    color: #ACBFA4;
+    padding: 25px;
+    
+align-items: center;
+    align-items: center;
+    align-items: center;
+    justify-content: center;
+    border:solid;
+    border-radius: 15px;
 `
 
 const DoneChar = Styled.text``
-const NotDoneChar = Styled.text``
 
-const nav = Styled.nav`
-position: absolute;
-left: 50%;
-`
-const Texts = Styled.nav``
 
-const Description = Styled.header`
-transform: translate(0, -50%); 
+const NotDoneChar = Styled.text`
+    display: column;
+    text-align: center;
+    word-break: break-word;
+    padding: 5px;
+
 `
 
+const UserFeedback = Styled.div`
+    padding: 10px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
 
 function App() {
+
 
 
     const words = ["quantity", "quality", "inefficacious", "abandon", "authority", "award", "aware",
@@ -45,8 +56,8 @@ function App() {
         "reform", "occupation", "occupy", "organize", "partnership", "policy",
         "political", "pollution", "presentation", "rank", "relax"];
 
-    function Capitalize(str) { return (str.charAt(0).toUpperCase() + str.slice(1)); } //capitalize given string for approriate grammer visual
-    const [currentWord, setCurrentWord] = useState("") //Capitalize(words[Math.trunc(Math.random() * words.length)])
+    function Capitalize(str) { return (str.charAt(0).toUpperCase() + str.slice(1)); }; //capitalize given string for approriate grammer visual
+    const [currentWord, setCurrentWord] = useState(""); //Capitalize(words[Math.trunc(Math.random() * words.length)])
     const [userInput, setUserInput] = useState("");
     const [termDef, setTermDef] = useState("");
     const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
@@ -92,7 +103,6 @@ function App() {
     useEffect(() => {
         for (let i = 0; i < sessionWPM.length; i++) {
             avgNET = parseFloat(avgNET) + parseFloat(sessionWPM[i]);
-            //console.log({ i }, { numOfRounds }, { avgNET }, "session", sessionWPM) //data tracking for loop
         }
         avgNET = parseFloat(avgNET / sessionWPM.length).toFixed(2);
         setavgWPM(avgNET)
@@ -138,7 +148,7 @@ function App() {
     }
 
 
-    //( (# of char / 5)-errors ) / time(in minutes) //stardard way of calculating wpm
+    /*stardard way of calculating wpm*/ //( (# of char / 5)-errors ) / time(in minutes) 
     const calcWPM = (time) => {
         defSplit = termDef.split("");
         let userSplit = userInput.split("");
@@ -150,50 +160,33 @@ function App() {
         setnumOfRounds(prevnumOfRounds => prevnumOfRounds + 1);
         setNetWPM(wpmCalc);
         setsessionWPM(prevsessionWPM => [...prevsessionWPM, wpmCalc]);
-        //console.log({ a }, { time }, { roundTime }, { wrongChar }); //Caculation variables
+        //console.log({ a }, { time }, { roundTime }, { wrongChar }); //Caculation variables - debugging
         return;
     }
 
     const TextViewer = () => { //makes the divs for app view to show user progression through text
         const userSplit = userInput.split("");
         const completedCharsString = userInput.substring(0, userSplit.length)
-        const completedCharsDiv = <DoneChar style={{ color: "green" }}> {completedCharsString}</DoneChar >
+        const completedCharsDiv = <DoneChar style={{ color: "green", backgroundColor: "lightgrey" }}> {completedCharsString}</DoneChar >
         const incompletedCharsString = termDef.substring(userSplit.length)
         const incompletedCharsDiv = <NotDoneChar style={{ color: "rgb(255, 128, 128)" }}>{incompletedCharsString}</NotDoneChar>
         return <>{completedCharsDiv}{incompletedCharsDiv}</>;
     }
 
     return (
-        <>
-
-
-            <TestBlock>
-
-                <Description>Start typing to begin, new wpm per term. Click the "Escape" key for a new term.</Description>
-
-
-                <Texts>
-                    <div className="Texts">
-                        <br />
+            <MainContainer>
                         Term = {currentWord}
                         <br />
                         Definition =
                         <TextViewer />
-
-
-                    </div>
-                    <div className="datatracking">
+                    <UserFeedback>
                         <br />
                         netWPM of previous term = {netWPM} <br />
-                        Average netWPM for session = {avgWPM || 0}
-                    </div>
-                </Texts>
-
-            </TestBlock>
-
-
-        </>
+                        Average netWPM for session = {avgWPM}
+                    </UserFeedback>
+            </MainContainer>
     );
 }
 
 export default App;
+
