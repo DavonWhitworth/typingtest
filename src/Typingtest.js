@@ -118,9 +118,11 @@ function App() {
     "relax",
   ];
 
+  //capitalize given string for approriate grammer visual
   function Capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
-  } //capitalize given string for approriate grammer visual
+  }
+
   const [currentWord, setCurrentWord] = useState(""); //Capitalize(words[Math.trunc(Math.random() * words.length)])
   const [userInput, setUserInput] = useState("");
   const [termDef, setTermDef] = useState("");
@@ -132,7 +134,6 @@ function App() {
   const [roundStartTime, setRoundStartTime] = useState(0);
   const [wrongChar, setWrongChar] = useState(0);
   const [avgWPM, setavgWPM] = useState(0);
-  const [numOfRounds, setnumOfRounds] = useState(0); //not used in mechanics anymore, just deugging logs
   const [sessionWPM, setsessionWPM] = useState([]);
   var defSplit = [];
   var avgNET = 0;
@@ -214,9 +215,12 @@ function App() {
     setUserInput("");
     setWrongChar(0);
     setNewWord();
-  }; //( (# of char / 5)-errors ) / time(in minutes)
+  };
 
-  /*stardard way of calculating wpm*/ const calcWPM = (time) => {
+  //( (# of char / 5)-errors ) / time(in minutes)
+  /*stardard way of calculating wpm*/
+
+  const calcWPM = (time) => {
     defSplit = termDef.split("");
     let userSplit = userInput.split("");
     let a = userSplit.length / 5;
@@ -224,10 +228,8 @@ function App() {
     if (a <= 0) a = 1;
     const roundTime = time / 60;
     const wpmCalc = parseFloat(a / roundTime).toFixed(2);
-    setnumOfRounds((prevnumOfRounds) => prevnumOfRounds + 1);
     setNetWPM(wpmCalc);
     setsessionWPM((prevsessionWPM) => [...prevsessionWPM, wpmCalc]);
-    //console.log({ a }, { time }, { roundTime }, { wrongChar }); //Caculation variables - debugging
     return;
   };
 
@@ -236,14 +238,16 @@ function App() {
     const userSplit = userInput.split("");
     const completedCharsString = userInput.substring(0, userSplit.length);
     const completedCharsDiv = (
-      <DoneChar style={{ color: "green", backgroundColor: "lightgrey" }}>
+      <DoneChar
+        style={{ color: "rgb(255, 255, 255)", backgroundColor: "green" }}
+      >
         {" "}
         {completedCharsString}
       </DoneChar>
     );
     const incompletedCharsString = termDef.substring(userSplit.length);
     const incompletedCharsDiv = (
-      <NotDoneChar style={{ color: "rgb(255, 128, 128)" }}>
+      <NotDoneChar style={{ color: "rgb(255, 255, 255)" }}>
         {incompletedCharsString}
       </NotDoneChar>
     );

@@ -20,7 +20,7 @@ function App() {
     <div>
       <Description>
         Start typing to begin, new wpm per term. Click the "Escape" key for a
-        new term. (Does not effect avgWPM)
+        new term.
       </Description>
       <MainContainer>
         <Typingtest />
