@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Styles from "./global.css";
 import Styled from "styled-components";
 import axios from "axios";
 import useEventListener from "./useEventListener";
