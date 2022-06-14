@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import Styles from "./global.css";
 import Styled from "styled-components";
 import axios from "axios";
 import useEventListener from "./useEventListener";
-//import Styles from './style.css';
 
 //Possible names: SpeedVocab, VocabTyper, SpeedTyper
 
@@ -149,8 +149,9 @@ function App() {
   };
 
   const setNewWord = () => {
-    //Helper function to avoid returning mismatched definition to term
+    //Help avoid returning mismatched definition to term
     let word = Capitalize(words[Math.trunc(Math.random() * words.length)]);
+    if(word === currentWord) setNewWord();
     getDefinition(word);
   };
 
