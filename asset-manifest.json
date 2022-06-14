@@ -1,13 +1,11 @@
 {
-  "main.css": "/typingtest/static/css/main.81c650cc.chunk.css",
-  "main.js": "/typingtest/static/js/main.fdf6a366.chunk.js",
-  "main.js.map": "/typingtest/static/js/main.fdf6a366.chunk.js.map",
-  "static/js/1.b2bd209f.chunk.js": "/typingtest/static/js/1.b2bd209f.chunk.js",
-  "static/js/1.b2bd209f.chunk.js.map": "/typingtest/static/js/1.b2bd209f.chunk.js.map",
+  "main.js": "/typingtest/static/js/main.d84573f2.chunk.js",
+  "main.js.map": "/typingtest/static/js/main.d84573f2.chunk.js.map",
+  "static/js/1.d0e80f83.chunk.js": "/typingtest/static/js/1.d0e80f83.chunk.js",
+  "static/js/1.d0e80f83.chunk.js.map": "/typingtest/static/js/1.d0e80f83.chunk.js.map",
   "runtime~main.js": "/typingtest/static/js/runtime~main.ee13e262.js",
   "runtime~main.js.map": "/typingtest/static/js/runtime~main.ee13e262.js.map",
-  "static/css/main.81c650cc.chunk.css.map": "/typingtest/static/css/main.81c650cc.chunk.css.map",
   "index.html": "/typingtest/index.html",
-  "precache-manifest.212497e659ad0236ac8f891cda82499c.js": "/typingtest/precache-manifest.212497e659ad0236ac8f891cda82499c.js",
+  "precache-manifest.e4bf2f0adb3efd4a140b080c2de57d3d.js": "/typingtest/precache-manifest.e4bf2f0adb3efd4a140b080c2de57d3d.js",
   "service-worker.js": "/typingtest/service-worker.js"
 }
