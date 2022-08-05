@@ -1,5 +1,5 @@
 import React from "react";
-import TypingTest from "./typingtest";
+import TypingTest from "./typingtest.js";
 import Styled from "styled-components";
 
 const MainContainer = Styled.div`
