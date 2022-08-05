@@ -8,27 +8,40 @@ import useEventListener from "./useEventListener";
 //Possible names: SpeedVocab, VocabTyper, SpeedTyper
 
 const MainContainer = Styled.div`
-    height: 100%;
-    width: 60%;
-    color: #ACBFA4;
-    padding: 25px;
-    
-align-items: center;
-    align-items: center;
-    align-items: center;
-    justify-content: center;
-    border:solid;
-    border-radius: 15px;
+  height: 100%;
+  width: 60%;
+  color: #ffcc33;
+  padding: 25px;
+  font-size: 120%;  
+  align-items: center;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+  border:solid;
+  border-radius: 15px;
 `;
 
-const DoneChar = Styled.text``;
+const DoneChar = Styled.text`
+  color: yellow`;
 
 const NotDoneChar = Styled.text`
     display: column;
     text-align: center;
     word-break: break-word;
-    padding: 5px;
+    
+   
 
+`;
+
+const ActiveChar = Styled.text`
+  //background-color: rgba(128,128,128, 0.2);
+  border-style: solid;
+  border-color: white;
+  border-width: 0.2px;
+  padding: 0.6px;
+  margin: 0.5px;
+  font-size: 110%;
+  
 `;
 
 const UserFeedback = Styled.div`
@@ -95,7 +108,6 @@ function App() {
     "mystery",
     "narrative",
     "natural",
-    "necessary",
     "neighbor",
     "negotiation",
     "negotiate",
@@ -227,29 +239,27 @@ function App() {
     setnumOfRounds((prevnumOfRounds) => prevnumOfRounds + 1);
     setNetWPM(wpmCalc);
     setsessionWPM((prevsessionWPM) => [...prevsessionWPM, wpmCalc]);
-    //console.log({ a }, { time }, { roundTime }, { wrongChar }); //Caculation variables - debugging
     return;
   };
 
   const TextViewer = () => {
     //makes the divs for app view to show user progression through text
-    const userSplit = userInput.split("");
+    const userSplit = userInput; //userInput.split("");
     const completedCharsString = userInput.substring(0, userSplit.length);
-    const completedCharsDiv = (
-      <DoneChar style={{ color: "green", backgroundColor: "lightgrey" }}>
-        {" "}
-        {completedCharsString}
-      </DoneChar>
+    const completedCharsDiv = <DoneChar>{completedCharsString}</DoneChar>;
+    const activechar = termDef.substring(
+      userSplit.length,
+      userSplit.length + 1
     );
-    const incompletedCharsString = termDef.substring(userSplit.length);
+    const activecharacter = <ActiveChar>{activechar}</ActiveChar>;
+    const incompletedCharsString = termDef.substring(userSplit.length + 1);
     const incompletedCharsDiv = (
-      <NotDoneChar style={{ color: "rgb(255, 128, 128)" }}>
-        {incompletedCharsString}
-      </NotDoneChar>
+      <NotDoneChar>{incompletedCharsString}</NotDoneChar>
     );
     return (
       <>
         {completedCharsDiv}
+        {activecharacter}
         {incompletedCharsDiv}
       </>
     );
