@@ -1,5 +1,5 @@
 import React from "react";
-import Typingtest from "./typingtest.js";
+import TypingTest from "./typingtest";
 import Styled from "styled-components";
 
 const MainContainer = Styled.div`
@@ -23,7 +23,7 @@ function App() {
         new term. (Does not effect avgWPM)
       </Description>
       <MainContainer>
-        <Typingtest />
+        <TypingTest />
       </MainContainer>
     </div>
   );
