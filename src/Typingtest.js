@@ -144,7 +144,7 @@ function App() {
   const [roundStartTime, setRoundStartTime] = useState(0);
   const [wrongChar, setWrongChar] = useState(0);
   const [avgWPM, setavgWPM] = useState(0);
-  const [numOfRounds, setnumOfRounds] = useState(0); //not used in mechanics anymore, just deugging logs
+
   const [sessionWPM, setsessionWPM] = useState([]);
   var defSplit = [];
   var avgNET = 0;
@@ -236,7 +236,7 @@ function App() {
     if (a <= 0) a = 1;
     const roundTime = time / 60;
     const wpmCalc = parseFloat(a / roundTime).toFixed(2);
-    setnumOfRounds((prevnumOfRounds) => prevnumOfRounds + 1);
+
     setNetWPM(wpmCalc);
     setsessionWPM((prevsessionWPM) => [...prevsessionWPM, wpmCalc]);
     return;
