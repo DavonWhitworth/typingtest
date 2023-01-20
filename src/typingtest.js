@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// eslint-disable-next-line
 import Styles from "./global.css";
 import Styled from "styled-components";
 import axios from "axios";
@@ -25,12 +26,9 @@ const DoneChar = Styled.text`
   color: yellow`;
 
 const NotDoneChar = Styled.text`
-    display: column;
-    text-align: center;
-    word-break: break-word;
-    
-   
-
+  display: column;
+  text-align: center;
+  word-break: break-word;
 `;
 
 const ActiveChar = Styled.text`
